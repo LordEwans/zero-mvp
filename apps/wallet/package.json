@@ -18,11 +18,13 @@
     "@plasmohq/messaging": "^0.6.2",
     "@plasmohq/storage": "^1.12.0",
     "@simplewebauthn/browser": "^11.0.0",
+    "comlink": "^4.4.1",
     "ethers": "^6.13.4",
     "plasmo": "0.89.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "sindri": "0.0.1-alpha.61",
+    "tlsn-js": "0.1.0-alpha.7.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
