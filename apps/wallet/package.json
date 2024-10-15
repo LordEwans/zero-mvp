@@ -1,0 +1,42 @@
+{
+  "name": "wallet",
+  "displayName": "Wallet",
+  "version": "0.0.1",
+  "description": "An application that enables users interact with the ZERO Protocol",
+  "author": "ZERO Labs <https://0xzero.org>",
+  "scripts": {
+    "dev": "plasmo dev --target=firefox-mv2",
+    "build": "plasmo build",
+    "package": "plasmo package"
+  },
+  "dependencies": {
+    "@kwilteam/kwil-js": "^0.8.1",
+    "@lit-protocol/contracts-sdk": "^6.10.0",
+    "@lit-protocol/core": "^6.10.0",
+    "@lit-protocol/lit-auth-client": "^6.10.0",
+    "@lit-protocol/lit-node-client": "^6.10.0",
+    "@plasmohq/messaging": "^0.6.2",
+    "@plasmohq/storage": "^1.12.0",
+    "@simplewebauthn/browser": "^11.0.0",
+    "ethers": "^6.13.4",
+    "plasmo": "0.89.3",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "sindri": "0.0.1-alpha.61",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "4.1.1",
+    "@types/chrome": "0.0.258",
+    "@types/node": "20.11.5",
+    "@types/react": "18.2.48",
+    "@types/react-dom": "18.2.18",
+    "prettier": "3.2.4",
+    "typescript": "5.3.3"
+  },
+  "manifest": {
+    "host_permissions": [
+      "https://*/*"
+    ]
+  }
+}
