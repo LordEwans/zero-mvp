@@ -45,7 +45,7 @@ function IndexPopup() {
     <div className="p-4 h-[600px] w-[360px] flex justify-center items-center">
       <a href="/options.html" target="_blank" className="href">
         <Button>
-          <EnvelopeClosedIcon className="mr-2 h-4 w-4" /> Login with Email
+          <EnvelopeClosedIcon className="mr-2 h-4 w-4" /> Sign In with Email
         </Button>
       </a>
     </div>
