@@ -1,5 +1,3 @@
-'use client'
-
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -20,6 +18,8 @@ const formSchema = z.object({
 export default function OptionsIndex() {
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()
+
+  document.body.classList.add("dark")
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
