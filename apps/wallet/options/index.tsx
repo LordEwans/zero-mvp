@@ -32,6 +32,12 @@ import { useToast } from "~/hooks/use-toast"
 
 import "../styles/global.css"
 
+import * as Comlink from "comlink"
+const { init, Prover, NotarizedSession, TlsProof }: any = Comlink.wrap(
+  new Worker(new URL("./worker.ts", import.meta.url), {type: 'module'})
+)
+console.log(init)
+
 const emailFormSchema = z.object({
   email: z.string().email({ message: "Invalid email address" })
 })
