@@ -8,11 +8,10 @@ A Turborepo which includes the following packages/apps:
 
 ### Apps and Packages
 
-- `@repo/wallet`: a [Plasmo](https://docs.plasmo.com/) app, for the OMID wallet extension
-- `@repo/app`: another [Nuxt.js](https://nuxt.com/) app, the main app
-- `@repo/contracts`: a [Solidity](https://soliditylang.org/) and [Hardhat](https://hardhat.org) project
-- `@repo/ui`: a stub Vue component library shared by both the applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `@0xzerolabs/wallet`: a [Plasmo](https://docs.plasmo.com/) app, for the OMID wallet extension
+- `@0xzerolabs/contracts`: a [Solidity](https://soliditylang.org/) and [Hardhat](https://hardhat.org) project
+- `@0xzerolabs/ui`: a stub component library shared by all the applications
+- `@0xzerolabs/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
@@ -29,7 +28,7 @@ This Turborepo has some additional tools already setup:
 To build all apps and packages, run the following command:
 
 ```
-cd zero-mono
+cd zero-mvp
 pnpm build
 ```
 
@@ -38,7 +37,7 @@ pnpm build
 To develop all apps and packages, run the following command:
 
 ```
-cd zero-mono
+cd zero-mvp
 pnpm dev
 ```
 
@@ -49,7 +48,7 @@ Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo
 By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
 
 ```
-cd zero-mono
+cd zero-mvp
 npx turbo login
 ```
 
