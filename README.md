@@ -2,7 +2,7 @@
   <img src="./apps/wallet/assets/icon.png" width="300" alt="0xzero.org" />
 </p>
 
-# ZERO MVP Mono
+# ZERO MVP
 
 Welcome to the base of all of our code. Feel free to look around.
 
