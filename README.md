@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./apps/wallet/assets/icon.png" width="300" alt="0xzero.org" />
+</p>
+
 # ZERO MVP Mono
 
 Welcome to the base of all of our code. Feel free to look around.
@@ -13,7 +17,7 @@ A Turborepo which includes the following packages/apps:
 - `@0xzerolabs/ui`: a stub component library shared by all the applications
 - `@0xzerolabs/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+Not all of the package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
 ### Utilities
 
