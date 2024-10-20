@@ -4,6 +4,8 @@
 
 # ZERO MVP
 
+[![Rust CI](https://github.com/0xZeroLabs/zero-mvp/actions/workflows/rust-ci.yml/badge.svg)](https://github.com/0xZeroLabs/zero-mvp/actions/workflows/rust-ci.yml)
+
 Welcome to the base of all of our code. Feel free to look around.
 
 ## What's inside?
