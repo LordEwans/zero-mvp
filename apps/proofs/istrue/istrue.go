@@ -9,17 +9,18 @@ import (
 	"github.com/consensys/gnark-crypto/ecc"
 	"github.com/consensys/gnark/backend/witness"
 	"github.com/consensys/gnark/frontend"
+	"github.com/consensys/gnark/std/math/bits"
 )
 
 type Circuit struct {
-	// Your circuit inputs go here.
-	X frontend.Variable
-	Y frontend.Variable `gnark:",public"`
+	B frontend.Variable `gnark:",public"`
 }
 
 func (circuit *Circuit) Define(api frontend.API) error {
-	// Your circuit logic goes here.
-	api.AssertIsEqual(circuit.X, circuit.Y)
+	inputBit := bits.ToBinary(api, circuit.B)[0]
+
+	api.AssertIsEqual(inputBit, 1)
+
 	return nil
 }
 
@@ -56,11 +57,9 @@ func FromJson(pathInput string) witness.Witness {
 	}
 
 	// Your witness construction logic goes here.
-	X := frontend.Variable(data["X"])
-	Y := frontend.Variable(data["Y"])
+	B := frontend.Variable(data["B"])
 	assignment := Circuit{
-		X: X,
-		Y: Y,
+		B,
 	}
 	w, err := frontend.NewWitness(&assignment, ecc.BN254.ScalarField())
 	if err != nil {

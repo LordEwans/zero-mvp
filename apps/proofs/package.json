@@ -5,16 +5,17 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx index.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "ethereumjs-util": "^7.1.5",
+    "ethers": "^6.13.4",
     "sindri": "0.0.1-alpha.61"
   },
   "devDependencies": {
-    "ts-node": "^10.9.2"
+    "tsx": "^4.19.1"
   }
 }
