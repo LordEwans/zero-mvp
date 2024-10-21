@@ -1,22 +1,87 @@
-import { ActivityLogIcon, EnvelopeClosedIcon } from "@radix-ui/react-icons"
+import { ComponentBooleanIcon, LockClosedIcon } from "@radix-ui/react-icons"
 import React, { useEffect, useState } from "react"
+import { Storage } from "@plasmohq/storage"
 
-import "./styles/global.css"
+import "~/styles/global.css"
 import { Button } from "~/components/ui/button"
+import { PinModal } from "~/pinmodal"
+import { decryptWallet } from "~/utlis"
+import { ethers } from "ethers"
+import { useToast } from "~/hooks/use-toast"
+
+const storage = new Storage()
 
 export default function IndexPopup() {
-  document.body.classList.add("dark")
+  const [hasStoredWallet, setHasStoredWallet] = useState(false)
+  const [showPinModal, setShowPinModal] = useState(false)
+  const [wallet, setWallet] = useState<ethers.HDNodeWallet | ethers.Wallet | null>(null)
+  const { toast } = useToast()
+
+  useEffect(() => {
+    document.body.classList.add("dark")
+    checkStoredWallet()
+  }, [])
+
+  const checkStoredWallet = async () => {
+    const storedWallet = await storage.get("encryptedWallet")
+    setHasStoredWallet(!!storedWallet)
+  }
+
+  const handleDecryptClick = () => {
+    setShowPinModal(true)
+  }
+
+  const handlePinSubmit = async (pin: string) => {
+    try {
+      const encryptedWallet = await storage.get("encryptedWallet")
+      const decryptedWallet = await decryptWallet(encryptedWallet, pin)
+      setWallet(decryptedWallet)
+      setShowPinModal(false)
+      toast({
+        title: "Wallet decrypted successfully",
+        description: "Your wallet has been decrypted and is ready to use"
+      })
+    } catch (error) {
+      toast({
+        title: "Decryption failed",
+        description: "Invalid PIN or corrupted wallet data",
+        variant: "destructive"
+      })
+    }
+  }
+
+  const handlePinModalClose = () => {
+    setShowPinModal(false)
+  }
 
   return (
-    <div className="p-4 h-[600px] w-[360px] flex justify-center items-center space-x-2 space-y-2">
-      <a href="/options.html" target="_blank" className="href">
-        <Button>
-          <EnvelopeClosedIcon className="mr-2 h-4 w-4" /> Sign In with Email
+    <div className="p-4 h-[600px] w-[360px] flex flex-col justify-center items-center space-y-4">
+      {wallet ? (
+        <div className="text-center">
+          <h2 className="text-xl font-bold mb-2">Wallet Decrypted</h2>
+          <p className="mb-4">Your wallet is ready to use.</p>
+          <div className="bg-secondary p-2 rounded-md break-all">
+            {wallet.address}
+          </div>
+        </div>
+      ) : hasStoredWallet ? (
+        <Button onClick={handleDecryptClick}>
+          <LockClosedIcon className="mr-2 h-4 w-4" /> Decrypt Wallet
         </Button>
-      </a>
-      <Button onClick={runNotarization}>
-        <ActivityLogIcon className="mr-2 h-4 w-4" /> Notarise
-      </Button>
+      ) : (
+        <a href="/options.html" target="_blank" className="href">
+          <Button>
+            <ComponentBooleanIcon className="mr-2 h-4 w-4" /> Import Wallet
+          </Button>
+        </a>
+      )}
+      {showPinModal && (
+        <PinModal
+          onPinSet={handlePinSubmit}
+          onClose={handlePinModalClose}
+          isDecrypting={true}
+        />
+      )}
     </div>
   )
 }
@@ -25,10 +90,9 @@ import * as Comlink from 'comlink';
 import type { PresentationJSON } from 'tlsn-js/build/types';
 import { type Commit } from "tlsn-js"
 
-import type { WorkerExports } from './worker'
 
 // Create a type-safe proxy to the worker
-const worker = Comlink.wrap<WorkerExports>(
+const worker = Comlink.wrap<any>(
   new Worker(new URL('./worker.ts', import.meta.url), { type: 'module' })
 )
 
