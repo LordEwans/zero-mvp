@@ -1,4 +1,8 @@
-import { ComponentBooleanIcon, LockClosedIcon, AvatarIcon } from "@radix-ui/react-icons"
+import {
+  AvatarIcon,
+  ComponentBooleanIcon,
+  LockClosedIcon
+} from "@radix-ui/react-icons"
 import React, { useEffect, useState } from "react"
 
 import { Storage } from "@plasmohq/storage"
@@ -14,6 +18,7 @@ import { Button } from "~/components/ui/button"
 import { useToast } from "~/hooks/use-toast"
 import { PinModal } from "~/pinmodal"
 import { decryptWallet } from "~/utlis"
+import { init } from "~kwil/kwil"
 
 const storage = new Storage()
 
@@ -44,6 +49,7 @@ export default function IndexPopup() {
       const encryptedWallet = await storage.get("encryptedWallet")
       const decryptedWallet = await decryptWallet(encryptedWallet, pin)
       setWallet(decryptedWallet)
+      init(decryptedWallet.privateKey)
       setShowPinModal(false)
       toast({
         title: "Wallet decrypted successfully",

@@ -19,6 +19,7 @@ import { Textarea } from "~components/ui/textarea"
 import { useToast } from "~hooks/use-toast"
 
 import "~/styles/global.css"
+import { init } from "~kwil/kwil"
 
 const storage = new Storage()
 
@@ -90,6 +91,7 @@ const OptionsIndex = () => {
         const encryptedWallet = await storage.get("encryptedWallet")
         const decryptedWallet = await decryptWallet(encryptedWallet, pin)
         setWallet(decryptedWallet)
+        init(decryptedWallet.privateKey)
         toast({
           title: "Wallet decrypted successfully",
           description: "Your wallet has been decrypted and is ready to use"
