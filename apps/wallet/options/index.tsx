@@ -5,6 +5,8 @@ import { Storage } from "@plasmohq/storage"
 
 import { Button } from "~/components/ui/button"
 import { Label } from "~/components/ui/label"
+import { PinModal } from "~/pinmodal"
+import { decryptWallet, encryptWallet } from "~/utlis"
 import {
   Card,
   CardContent,
@@ -16,10 +18,8 @@ import {
 import { Textarea } from "~components/ui/textarea"
 import { useToast } from "~hooks/use-toast"
 
-import { PinModal } from "~/pinmodal"
-import { encryptWallet, decryptWallet } from "~/utlis"
-
 import "~/styles/global.css"
+import { init } from "~kwil/kwil"
 
 const storage = new Storage()
 
@@ -91,6 +91,7 @@ const OptionsIndex = () => {
         const encryptedWallet = await storage.get("encryptedWallet")
         const decryptedWallet = await decryptWallet(encryptedWallet, pin)
         setWallet(decryptedWallet)
+        init(decryptedWallet.privateKey)
         toast({
           title: "Wallet decrypted successfully",
           description: "Your wallet has been decrypted and is ready to use"
@@ -144,15 +145,14 @@ const OptionsIndex = () => {
           </CardTitle>
           <CardDescription>
             {wallet
-              ? "Your wallet has been successfully imported"
-              : "Enter your seed phrase or private key to import your wallet"}
+              ? "Your wallet has been successfully imported."
+              : "Enter your seed phrase or private key to import your wallet."}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {wallet ? (
             <div className="space-y-2">
-              <Label>Wallet Address</Label>
-              <div className="p-2 bg-secondary rounded-md break-all">
+              <div className="p-2 bg-secondary text-sm rounded-md flex items-center justify-center">
                 {wallet.address}
               </div>
             </div>

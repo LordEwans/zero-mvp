@@ -55,13 +55,15 @@ func (pk PublicKey[T, S]) Verify(api frontend.API, params sw_emulated.CurveParam
 	}
 }
 
-type Circuit[T, S emulated.FieldParams] struct {
+type T = emulated.Secp256k1Fp
+type S = emulated.Secp256k1Fr
+type Circuit struct {
 	Sig Signature[S]        `gnark:",public"`
 	Msg emulated.Element[S] `gnark:",public"`
 	Pub PublicKey[T, S]     `gnark:",public"`
 }
 
-func (c *Circuit[T, S]) Define(api frontend.API) error {
+func (c *Circuit) Define(api frontend.API) error {
 	c.Pub.Verify(api, sw_emulated.GetCurveParams[T](), &c.Msg, &c.Sig)
 	return nil
 }
@@ -92,7 +94,7 @@ func FromJson(pathInput string) witness.Witness {
 
 	hash := ecdsa.HashToInt(msg)
 
-	assignment := Circuit[emulated.Secp256k1Fp, emulated.Secp256k1Fr]{
+	assignment := Circuit{
 		Sig: Signature[emulated.Secp256k1Fr]{
 			R: emulated.ValueOf[emulated.Secp256k1Fr](r),
 			S: emulated.ValueOf[emulated.Secp256k1Fr](s),
