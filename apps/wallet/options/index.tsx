@@ -5,6 +5,8 @@ import { Storage } from "@plasmohq/storage"
 
 import { Button } from "~/components/ui/button"
 import { Label } from "~/components/ui/label"
+import { PinModal } from "~/pinmodal"
+import { decryptWallet, encryptWallet } from "~/utlis"
 import {
   Card,
   CardContent,
@@ -15,9 +17,6 @@ import {
 } from "~components/ui/card"
 import { Textarea } from "~components/ui/textarea"
 import { useToast } from "~hooks/use-toast"
-
-import { PinModal } from "~/pinmodal"
-import { encryptWallet, decryptWallet } from "~/utlis"
 
 import "~/styles/global.css"
 
@@ -144,15 +143,14 @@ const OptionsIndex = () => {
           </CardTitle>
           <CardDescription>
             {wallet
-              ? "Your wallet has been successfully imported"
-              : "Enter your seed phrase or private key to import your wallet"}
+              ? "Your wallet has been successfully imported."
+              : "Enter your seed phrase or private key to import your wallet."}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {wallet ? (
             <div className="space-y-2">
-              <Label>Wallet Address</Label>
-              <div className="p-2 bg-secondary rounded-md break-all">
+              <div className="p-2 bg-secondary text-sm rounded-md flex items-center justify-center">
                 {wallet.address}
               </div>
             </div>
