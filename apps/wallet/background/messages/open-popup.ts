@@ -6,7 +6,7 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
       url: chrome.runtime.getURL("popup.html"),
       type: "popup",
       width: 400,
-      height: 640
+      height: 660
     },
     (window) => {
       console.log(`Popup window created with ID ${window.id}`)
