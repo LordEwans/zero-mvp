@@ -1,6 +1,7 @@
 import {
   AvatarIcon,
   ComponentBooleanIcon,
+  EnterFullScreenIcon,
   LockClosedIcon
 } from "@radix-ui/react-icons"
 import React, { useEffect, useState } from "react"
@@ -70,6 +71,21 @@ export default function IndexPopup() {
 
   return (
     <div className="p-4 h-[600px] w-[360px] flex flex-col justify-center items-center space-y-4">
+      <div className="w-full h-8 top-0 flex items-center fixed">
+        <div className="ml-auto">
+          {" "}
+          {/* Push the child to the right */}
+          <button
+            onClick={() => {
+              window.open("/options.html", "_blank")
+              window.focus()
+            }}
+            className="h-8 w-8 flex items-center justify-center">
+            <EnterFullScreenIcon className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+
       {wallet ? (
         <div className="text-center">
           <h2 className="text-xl font-bold mb-2">Wallet Decrypted</h2>

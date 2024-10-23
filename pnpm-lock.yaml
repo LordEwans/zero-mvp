@@ -77,6 +77,12 @@ importers:
         specifier: ^4.19.1
         version: 4.19.1
 
+  apps/sbt:
+    devDependencies:
+      nitropack:
+        specifier: latest
+        version: 2.9.7(idb-keyval@6.2.1)(magicast@0.3.4)
+
   apps/session:
     devDependencies:
       nitropack:
