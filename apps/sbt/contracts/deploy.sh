@@ -1,26 +1,17 @@
 #!/bin/bash
 
+# Exit on error
+set -e
+
 source .env
 
-if [ -z "$CID" ]; then
-    echo "CID is not set. Please set it in .env"
-    exit 1
-fi
-
-if [ -z "$RPC_URL" ]; then
-    echo "RPC URL is not set. Please set it in .env"
-    exit 1
-fi
-
-if [ -z "$PRIVATE_KEY" ]; then
-    echo "PRIVATE_KEY is not set. Please set it in .env"
-    exit 1
-fi
-
-if [ -z "$API_URL" ]; then
-    echo "API_URL is not set. Please set it in .env"
-    exit 1
-fi
+# Check required environment variables
+for var in CID RPC_URL PRIVATE_KEY API_URL API_KEY; do
+    if [ -z "${!var}" ]; then
+        echo "$var is not set. Please set it in .env"
+        exit 1
+    fi
+done
 
 forge install
 
@@ -29,4 +20,7 @@ forge script script/Deployer.s.sol \
     --rpc-url "$RPC_URL" \
     --private-key "$PRIVATE_KEY" \
     --broadcast \
+    --verify \
+    --etherscan-api-key "$API_KEY" \
+    --verifier-url "$API_URL" \
     --sig "run(string _cid)"
