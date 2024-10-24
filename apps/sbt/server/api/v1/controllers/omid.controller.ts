@@ -4,14 +4,13 @@ import omid from "./abi/OMID.json";
 
 //// implement verification of credential
 const config = useRuntimeConfig();
-const tokenContract = "0xC20463aFaA9E016fF64d1b6e4f8d5D9Ac0368455";
 const abi = omid.abi;
 
 export const mint = async (toAddress: string) => {
-  const network = config.public.rpc;
+  const network = config.rpc;
   const provider = new ethers.JsonRpcProvider(network);
 
-  const contract = new ethers.Contract(tokenContract, abi, provider);
+  const contract = new ethers.Contract(config.contract, abi, provider);
   const signer = new ethers.Wallet(config.privateKey!, provider);
 
   
@@ -20,7 +19,7 @@ export const mint = async (toAddress: string) => {
   // creating and sending the transaction object
   try {
     const tx = await signer.sendTransaction({
-      to: tokenContract,
+      to: config.contract,
       from: signer.address,
       value: ethers.parseUnits("0.000", "ether"),
       data: data,
@@ -45,10 +44,10 @@ export const mint = async (toAddress: string) => {
 };
 
 export const verify = async (toAddress: string, proof: string) => {
-  const network = config.public.rpc;
+  const network = config.rpc;
   const provider = new ethers.JsonRpcProvider(network);
 
-  const contract = new ethers.Contract(tokenContract, abi, provider);
+  const contract = new ethers.Contract(config.contract, abi, provider);
   const signer = new ethers.Wallet(config.privateKey!, provider);
 
   // verify proof saved on irys else throw error
@@ -58,7 +57,7 @@ export const verify = async (toAddress: string, proof: string) => {
   // creating and sending the transaction object
   try {
     const tx = await signer.sendTransaction({
-      to: tokenContract,
+      to: config.contract,
       from: signer.address,
       value: ethers.parseUnits("0.000", "ether"),
       data: data,
@@ -83,10 +82,10 @@ export const verify = async (toAddress: string, proof: string) => {
 };
 
 export const hasHuman = async (toAddress: string) => {
-  const network = config.public.rpc;
+  const network = config.rpc;
   const provider = new ethers.JsonRpcProvider(network);
 
-  const contract = new ethers.Contract(tokenContract, abi, provider);
+  const contract = new ethers.Contract(config.contract, abi, provider);
 
   
 
@@ -112,10 +111,10 @@ export const hasHuman = async (toAddress: string) => {
 };
 
 export const isVerified = async (toAddress: string) => {
-  const network = config.public.rpc;
+  const network = config.rpc;
   const provider = new ethers.JsonRpcProvider(network);
 
-  const contract = new ethers.Contract(tokenContract, abi, provider);
+  const contract = new ethers.Contract(config.contract, abi, provider);
 
   
 
@@ -142,10 +141,10 @@ export const isVerified = async (toAddress: string) => {
 };
 
 export const getHuman = async (toAddress: string) => {
-  const network = config.public.rpc;
+  const network = config.rpc;
   const provider = new ethers.JsonRpcProvider(network);
 
-  const contract = new ethers.Contract(tokenContract, abi, provider);
+  const contract = new ethers.Contract(config.contract, abi, provider);
 
   // creating and sending the transaction object
   try {
@@ -156,5 +155,3 @@ export const getHuman = async (toAddress: string) => {
     return [];
   }
 };
-
-console.log(abi)
