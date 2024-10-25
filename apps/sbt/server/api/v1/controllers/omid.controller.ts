@@ -14,7 +14,7 @@ export const mint = async (toAddress: string) => {
   const signer = new ethers.Wallet(config.privateKey!, provider);
 
   
-  const data = contract.interface.encodeFunctionData("mint", [toAddress]);
+  const data = contract.interface.encodeFunctionData("mint", [toAddress, false]);
 
   // creating and sending the transaction object
   try {
