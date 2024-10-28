@@ -69,8 +69,8 @@ async fn verify_handler(
     let verification_data = VerificationData {
         proving_system: ProvingSystemId::Groth16Bn254,
         proof: req.proof,
-        pub_input: req.pub_input,
-        verification_key: req.verification_key,
+        pub_input: Some(req.pub_input),
+        verification_key: Some(req.verification_key),
         vm_program_code: None,
         proof_generator_addr: wallet.address(),
     };
