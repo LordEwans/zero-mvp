@@ -3,11 +3,11 @@ import { useState } from "react"
 import { Button } from "~/components/ui/button"
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
-  DialogClose
+  DialogTitle
 } from "~/components/ui/dialog"
 import {
   InputOTP,
@@ -25,6 +25,7 @@ interface PinModalProps {
 export function PinModal({ onPinSet, onClose, isDecrypting }: PinModalProps) {
   const [pin, setPin] = useState("")
   const [error, setError] = useState("")
+  const [buttonLoading, setButtonLoading] = useState(false)
 
   const handleSubmit = () => {
     if (pin.length < 6) {
@@ -32,6 +33,7 @@ export function PinModal({ onPinSet, onClose, isDecrypting }: PinModalProps) {
       return
     }
     onPinSet(pin)
+    setButtonLoading(true)
   }
 
   return (
@@ -74,10 +76,16 @@ export function PinModal({ onPinSet, onClose, isDecrypting }: PinModalProps) {
           {error && <p className="text-red-500">{error}</p>}
           <div className="flex gap-2">
             <Button onClick={handleSubmit}>
-              {isDecrypting ? "Decrypt Wallet" : "Set PIN"}
+              {isDecrypting ? (
+                <>{buttonLoading ? "Decrypting..." : "Decrypt Wallet"}</>
+              ) : (
+                <>{buttonLoading ? "Preparing..." : "Set PIN"}</>
+              )}
             </Button>
             <DialogClose asChild>
-              <Button variant="outline" onClick={onClose}>Cancel</Button>
+              <Button variant="outline" onClick={onClose}>
+                Cancel
+              </Button>
             </DialogClose>
           </div>
         </div>

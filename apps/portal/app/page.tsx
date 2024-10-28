@@ -37,7 +37,7 @@ export default function Home() {
       method: "GET",
     };
 
-    fetch("https://session.mvp.0xzero.org/v1/init", requestOptions)
+    fetch("https://session.0xzero.org/v1/init", requestOptions)
       .then((response) => response.text())
       .then((result) => setSessionId(result))
       .catch((error) => console.log(error));

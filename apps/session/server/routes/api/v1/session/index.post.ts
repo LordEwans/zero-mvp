@@ -1,7 +1,8 @@
 export default eventHandler(async (event) => {
   const body = await readBody(event);
+  const config = useRuntimeConfig();
   const myHeaders = new Headers();
-  myHeaders.append("Api-Key", "{YOUR_API_KEY}");
+  myHeaders.append("Api-Key", config.api);
 
   var requestOptions: RequestInit = {
     method: "GET",
