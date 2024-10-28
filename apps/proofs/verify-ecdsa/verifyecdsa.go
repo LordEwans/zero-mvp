@@ -2,7 +2,11 @@ package verifyecdsa
 
 import (
 	"crypto/rand"
+	"encoding/json"
+	"fmt"
 	"math/big"
+	"os"
+	"path/filepath"
 
 	"github.com/consensys/gnark-crypto/ecc"
 	"github.com/consensys/gnark-crypto/ecc/bn254/ecdsa"
@@ -10,6 +14,7 @@ import (
 	"github.com/consensys/gnark/frontend"
 	"github.com/consensys/gnark/std/algebra/emulated/sw_emulated"
 	"github.com/consensys/gnark/std/math/emulated"
+	"github.com/ethereum/go-ethereum/crypto"
 )
 
 // Signature represents the signature for some message.
@@ -68,22 +73,57 @@ func (c *Circuit) Define(api frontend.API) error {
 	return nil
 }
 
+// Common utility for reading JSON in from a file.
+func ReadFromInputPath(pathInput string) (map[string]interface{}, error) {
+
+	absPath, err := filepath.Abs(pathInput)
+	if err != nil {
+		fmt.Println("Error constructing absolute path:", err)
+		return nil, err
+	}
+
+	file, err := os.Open(absPath)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	var data map[string]interface{}
+	err = json.NewDecoder(file).Decode(&data)
+	if err != nil {
+		panic(err)
+	}
+
+	return data, nil
+}
+
 // Construct a witness from input data in a JSON file.
 func FromJson(pathInput string) witness.Witness {
+	data, err := ReadFromInputPath(pathInput)
+	if err != nil {
+		panic(err)
+	}
+
+	// type assert the private key to string
+	privateKeyStr, ok := data["private_key"].(string)
+	if !ok {
+		panic("private_key in JSON is not a string")
+	}
 
 	// generate parameters
-	privKey, _ := ecdsa.GenerateKey(rand.Reader)
-	publicKey := privKey.PublicKey
-
-	// sign
-	msg := []byte("testing ECDSA (pre-hashed)")
-	sigBin, _ := privKey.Sign(msg, nil)
-
-	// check that the signature is correct
-	flag, _ := publicKey.Verify(sigBin, msg, nil)
-	if !flag {
-		panic("can't verify signature")
+	privKey, err := crypto.HexToECDSA(privateKeyStr)
+	if err != nil {
+		panic(fmt.Sprintf("failed to convert hex to ECDSA: %v", err))
 	}
+
+	// type assert the private key to string
+	msgStr, ok := data["message"].(string)
+	if !ok {
+		panic("private_key in JSON is not a string")
+	}
+	// sign
+	msg := []byte(msgStr)
+	sigBin, _ := privKey.Sign(rand.Reader, msg, nil)
 
 	// unmarshal signature
 	var sig ecdsa.Signature
@@ -101,8 +141,8 @@ func FromJson(pathInput string) witness.Witness {
 		},
 		Msg: emulated.ValueOf[emulated.Secp256k1Fr](hash),
 		Pub: PublicKey[emulated.Secp256k1Fp, emulated.Secp256k1Fr]{
-			X: emulated.ValueOf[emulated.Secp256k1Fp](privKey.PublicKey.A.X),
-			Y: emulated.ValueOf[emulated.Secp256k1Fp](privKey.PublicKey.A.Y),
+			X: emulated.ValueOf[emulated.Secp256k1Fp](privKey.PublicKey.X),
+			Y: emulated.ValueOf[emulated.Secp256k1Fp](privKey.PublicKey.Y),
 		},
 	}
 	w, err := frontend.NewWitness(&assignment, ecc.BN254.ScalarField())

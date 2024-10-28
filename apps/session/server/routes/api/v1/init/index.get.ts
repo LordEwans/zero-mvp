@@ -1,6 +1,7 @@
 export default eventHandler((event) => {
+  const config = useRuntimeConfig();
   const myHeaders = new Headers();
-  myHeaders.append("Api-Key", "{YOUR_API_KEY}");
+  myHeaders.append("Api-Key", config.api);
 
   var requestOptions: RequestInit = {
     method: "POST",

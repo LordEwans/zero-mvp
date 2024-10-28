@@ -39,7 +39,7 @@ const OptionsIndex = () => {
   }, [])
 
   const checkStoredWallet = async () => {
-    const storedWallet = await storage.get("encryptedWallet")
+    const storedWallet = await storage.get("encrypted_wallet")
     if (storedWallet) {
       setIsDecrypting(true)
       setShowPinModal(true)
@@ -88,7 +88,7 @@ const OptionsIndex = () => {
   const handlePinSubmit = async (pin: string) => {
     if (isDecrypting) {
       try {
-        const encryptedWallet = await storage.get("encryptedWallet")
+        const encryptedWallet = await storage.get("encrypted_wallet")
         const decryptedWallet = await decryptWallet(encryptedWallet, pin)
         setWallet(decryptedWallet)
         init(decryptedWallet.privateKey)
@@ -106,7 +106,7 @@ const OptionsIndex = () => {
     } else if (wallet) {
       try {
         const encryptedWallet = await encryptWallet(wallet, pin)
-        await storage.set("encryptedWallet", encryptedWallet)
+        await storage.set("encrypted_wallet", encryptedWallet)
         toast({
           title: "Wallet encrypted and stored",
           description: "Your wallet has been securely stored in the extension"

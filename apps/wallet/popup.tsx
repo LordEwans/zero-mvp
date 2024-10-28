@@ -1,8 +1,10 @@
 import {
   AvatarIcon,
+  BadgeIcon,
   ComponentBooleanIcon,
   EnterFullScreenIcon,
-  LockClosedIcon
+  LockClosedIcon,
+  UpdateIcon
 } from "@radix-ui/react-icons"
 import React, { useEffect, useState } from "react"
 
@@ -29,15 +31,38 @@ export default function IndexPopup() {
   const [wallet, setWallet] = useState<
     ethers.HDNodeWallet | ethers.Wallet | null
   >(null)
+  const [buttonLoading, setButtonLoading] = useState(false)
+  const [hasHuman, setHashHuman] = useState(false)
+  const [isVerified, setIsVerified] = useState(false)
+
   const { toast } = useToast()
 
   useEffect(() => {
     document.body.classList.add("dark")
     checkStoredWallet()
-  }, [])
+    try {
+      fetch("http://localhost:3000/api/v1/omid/check", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          address: wallet.address
+        })
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setHashHuman(data.response.pass)
+        })
+    } catch (error) {
+      console.error(error)
+    } finally {
+      // setButtonLoading(false)
+    }
+  }, [wallet])
 
   const checkStoredWallet = async () => {
-    const storedWallet = await storage.get("encryptedWallet")
+    const storedWallet = await storage.get("encrypted_wallet")
     setHasStoredWallet(!!storedWallet)
   }
 
@@ -45,9 +70,28 @@ export default function IndexPopup() {
     setShowPinModal(true)
   }
 
+  const mintIdentity = async () => {
+    setButtonLoading(true)
+    try {
+      fetch("https://sbt-mvp.0xzero.org/api/v1/omid/mint", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          address: wallet.address
+        })
+      })
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setButtonLoading(false)
+    }
+  }
+
   const handlePinSubmit = async (pin: string) => {
     try {
-      const encryptedWallet = await storage.get("encryptedWallet")
+      const encryptedWallet = await storage.get("encrypted_wallet")
       const decryptedWallet = await decryptWallet(encryptedWallet, pin)
       setWallet(decryptedWallet)
       init(decryptedWallet.privateKey)
@@ -93,20 +137,56 @@ export default function IndexPopup() {
           <div className="bg-secondary p-2 rounded-md break-all mb-2">
             {wallet.address}
           </div>
-          <Button onClick={handleDecryptClick}>
-            <AvatarIcon className="mr-2 h-4 w-4" /> Mint Identity
-          </Button>
+          {hasHuman ? (
+            <Button onClick={mintIdentity} disabled={buttonLoading}>
+              {buttonLoading ? (
+                <>
+                  <UpdateIcon className="mr-2 h-4 w-4 animate-spin" />{" "}
+                  Minting...
+                </>
+              ) : (
+                <>
+                  <AvatarIcon className="mr-2 h-4 w-4" /> Mint Identity
+                </>
+              )}
+            </Button>
+          ) : (
+            <>
+              {isVerified ? (
+                <p className="">Verified</p>
+              ) : (
+                <Button
+                  onClick={() => {
+                    window.open(`https://portal.0xzero.org/address=${wallet.address}`, "_blank")
+                  }}
+                  disabled={buttonLoading}>
+                  {buttonLoading ? (
+                    <>
+                      <UpdateIcon className="mr-2 h-4 w-4 animate-spin" />{" "}
+                      Verifying...
+                    </>
+                  ) : (
+                    <>
+                      <BadgeIcon className="mr-2 h-4 w-4" /> Verify Identity
+                    </>
+                  )}
+                </Button>
+              )}
+            </>
+          )}
         </div>
       ) : hasStoredWallet ? (
         <Button onClick={handleDecryptClick}>
           <LockClosedIcon className="mr-2 h-4 w-4" /> Decrypt Wallet
         </Button>
       ) : (
-        <a href="/options.html" target="_blank" className="href">
-          <Button>
-            <ComponentBooleanIcon className="mr-2 h-4 w-4" /> Import Wallet
-          </Button>
-        </a>
+        <Button
+          onClick={() => {
+            window.open("/options.html", "_blank")
+            window.focus()
+          }}>
+          <ComponentBooleanIcon className="mr-2 h-4 w-4" /> Import Wallet
+        </Button>
       )}
       {showPinModal && (
         <PinModal
