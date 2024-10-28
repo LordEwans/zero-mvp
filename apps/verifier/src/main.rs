@@ -187,9 +187,8 @@ mod tests {
         assert!(resp.status().is_success());
         let body: VerificationResponse = test::read_body_json(resp).await;
 
-        // For debugging
+        // For debugging (run test with: cargo test -- --nocapture)
         eprintln!("Response body: {:?}", body);
-        eprintln!("Verification data used:");
         eprintln!("Proof length: {}", proof.len());
         eprintln!("Verification key length: {}", verification_key.len());
         eprintln!("Public input length: {}", pub_input.len());
