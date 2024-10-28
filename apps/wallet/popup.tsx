@@ -157,7 +157,7 @@ export default function IndexPopup() {
               ) : (
                 <Button
                   onClick={() => {
-                    window.open(`https://portal.0xzero.org/address=${wallet.address}`, "_blank")
+                    window.open(`http://localhost:3001/?address=${wallet.address}`, "_blank")
                   }}
                   disabled={buttonLoading}>
                   {buttonLoading ? (
