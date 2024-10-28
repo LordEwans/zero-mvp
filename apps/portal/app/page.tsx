@@ -27,17 +27,24 @@ export default function Home() {
     }
   };
 
+  if (!walletAddress) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+        <h1 className="text-4xl font-bold text-gray-800 mb-4">
+          No Address Provided
+        </h1>
+        <p className="text-lg text-gray-600">
+          Please provide a wallet address to continue.
+        </p>
+      </div>
+    );
+  }
   useEffect(() => {
-    if (!walletAddress) {
-      router.push("/null");
-      return;
-    }
-
     const requestOptions: RequestInit = {
       method: "GET",
     };
 
-    fetch("https://session-phi.vercel.app/api/v1/init", requestOptions)
+    fetch("https://session-phi.vercel/api/v1/init", requestOptions)
       .then((response) => response.text())
       .then((result) => setSessionId(result))
       .catch((error) => console.log(error));
