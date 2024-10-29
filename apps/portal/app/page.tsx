@@ -44,7 +44,7 @@ export default function Home() {
       method: "GET",
     };
 
-    fetch("https://session-phi.vercel/api/v1/init", requestOptions)
+    fetch("https://session-phi.vercel.app/api/v1/init", requestOptions)
       .then((response) => response.text())
       .then((result) => setSessionId(result))
       .catch((error) => console.log(error));
