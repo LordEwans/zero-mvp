@@ -157,7 +157,7 @@ export default function IndexPopup() {
               ) : (
                 <Button
                   onClick={() => {
-                    window.open(`http://localhost:3001/?address=${wallet.address}`, "_blank")
+                    window.open(`https://zero-mvp.vercel.app/?address=${wallet.address}`, "_blank")
                   }}
                   disabled={buttonLoading}>
                   {buttonLoading ? (
